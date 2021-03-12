@@ -54,10 +54,10 @@ if __name__ == "__main__":
     for benchmark in benchmarks[args.dataset]:
         for part in parts:
             print(benchmark, part)
-            data = np.load('/content/drive/MyDrive/dgnn/{}/{}_data_joint.npy'.format(benchmark, part))
+            data = np.load('../data/{}/{}_data_joint.npy'.format(benchmark, part))
             N, C, T, V, M = data.shape
             fp_sp = open_memmap(
-                '/content/drive/MyDrive/dgnn/{}/{}_data_bone.npy'.format(benchmark, part),
+                '../data/{}/{}_data_bone.npy'.format(benchmark, part),
                 dtype='float32',
                 mode='w+',
                 shape=(N, 3, T, V, M))
