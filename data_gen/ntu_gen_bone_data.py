@@ -5,14 +5,14 @@ from numpy.lib.format import open_memmap
 from tqdm import tqdm
 
 paris = {
-    'ntu/xview': (
+    'xview': (
         (1, 2), (2, 21), (3, 21), (4, 3), (5, 21),
         (6, 5), (7, 6), (8, 7), (9, 21), (10, 9),
         (11, 10), (12, 11), (13, 1), (14, 13), (15, 14),
         (16, 15), (17, 1), (18, 17), (19, 18), (20, 19),
         (22, 23), (21, 21), (23, 8), (24, 25), (25, 12)
     ),
-    'ntu/xsub': (
+    'xsub': (
         (1, 2), (2, 21), (3, 21), (4, 3), (5, 21),
         (6, 5), (7, 6), (8, 7), (9, 21), (10, 9),
         (11, 10), (12, 11), (13, 1), (14, 13), (15, 14),
@@ -28,7 +28,7 @@ paris = {
 }
 
 sets = {'train', 'val'}
-datasets = {'ntu/xview', 'ntu/xsub'}
+datasets = {'xview', 'xsub'}
 
 def gen_bone_data():
     """Generate bone data from joint data for NTU skeleton dataset"""
