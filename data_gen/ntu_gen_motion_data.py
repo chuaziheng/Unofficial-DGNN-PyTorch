@@ -5,7 +5,7 @@ from numpy.lib.format import open_memmap
 from tqdm import tqdm
 
 sets = {'train', 'val'}
-datasets = {'ntu/xview', 'ntu/xsub'}
+datasets = {'xview', 'xsub'}
 parts = {'joint', 'bone'}
 
 
@@ -13,7 +13,7 @@ def gen_motion_data():
     for dataset in datasets:
         for set in sets:
             for part in parts:
-                fn = '../data/{}/{}_data_{}.npy'.format(dataset, set, part)
+                fn = '/content/drive/MyDrive/dgnn/{}/{}_data_{}.npy'.format(dataset, set, part)
                 if not os.path.exists(fn):
                     print('Joint/bone data does not exist for {} {} set'.format(dataset, set))
                     continue
@@ -22,7 +22,7 @@ def gen_motion_data():
                 data = np.load(fn)
                 (N, C, T, V, M) = data.shape
                 fp_sp = open_memmap(
-                    '../data/{}/{}_data_{}_motion.npy'.format(dataset, set, part),
+                    '/content/drive/MyDrive/dgnn/{}/{}_data_{}_motion.npy'.format(dataset, set, part),
                     dtype='float32',
                     mode='w+',
                     shape=data.shape)

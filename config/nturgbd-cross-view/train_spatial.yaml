@@ -4,8 +4,8 @@ model_saved_name: ./runs/ntu_cs_dgnn_spatial
 feeder: feeders.feeder.Feeder
 train_feeder_args:
   joint_data_path: /content/drive/MyDrive/dgnn/xview/train_data_joint.npy
-  bone_data_path:  /content/drive/MyDrive/dgnn/xview/train_data_joint.npy
-  label_path: /content/drive/MyDrive/dgnn/xview/train_data_bone.pkl
+  bone_data_path:  /content/drive/MyDrive/dgnn/xview/train_data_bone.npy
+  label_path: /content/drive/MyDrive/dgnn/xview/train_label.pkl
   debug: False
   random_choose: False
   random_shift: False
@@ -15,7 +15,7 @@ train_feeder_args:
 
 test_feeder_args:
   joint_data_path: /content/drive/MyDrive/dgnn/xview/val_data_joint.npy
-  bone_data_path: /content/drive/MyDrive/dgnn/xview/val_data_joint.npy
+  bone_data_path: /content/drive/MyDrive/dgnn/xview/val_data_bone.npy
   label_path: /content/drive/MyDrive/dgnn/xview/val_label.pkl
 
 # model
