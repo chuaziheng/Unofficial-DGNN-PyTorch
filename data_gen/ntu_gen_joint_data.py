@@ -66,8 +66,8 @@ def get_nonzero_std(s):
     # Select valid frames where sum of all nodes is nonzero
     s = s[s.sum((1,2)) != 0]
     if len(s) != 0:
-        # Compute sum of standard deviation for all 3 channels as `energy`
-        s = s[..., 0].std() + s[..., 1].std() + s[..., 2].std()
+        # Compute sum of standard deviation for all 2 channels as `energy`
+        s = s[..., 0].std() + s[..., 1].std()
     else:
         s = 0
     return s
@@ -81,7 +81,7 @@ def read_xyz(file, max_body=4, num_joint=25):  # 取了前两个body
         for m, b in enumerate(f['bodyInfo']):
             for j, v in enumerate(b['jointInfo']):
                 if m < max_body and j < num_joint:
-                    data[m, n, j, :] = [v['x'], v['y'], v['z']]
+                    data[m, n, j, :] = [v['x'], v['y']] #, v['z']
 
     # select 2 max energy body
     energy = np.array([get_nonzero_std(x) for x in data])
