@@ -35,10 +35,10 @@ def gen_bone_data():
     for dataset in datasets:
         for set in sets:
             print(dataset, set)
-            data = np.load('/content/drive/MyDrive/dgnn/{}/{}_data_joint.npy'.format(dataset, set))
+            data = np.load('/gdrive/MyDrive/dgnn{}/{}_data_joint.npy'.format(dataset, set))
             N, C, T, V, M = data.shape
             fp_sp = open_memmap(
-                '/content/drive/MyDrive/dgnn/{}/{}_data_bone.npy'.format(dataset, set),
+                '/gdrive/MyDrive/dgnn{}/{}_data_bone.npy'.format(dataset, set),
                 dtype='float32',
                 mode='w+',
                 shape=(N, 3, T, V, M))
