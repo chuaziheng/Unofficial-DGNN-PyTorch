@@ -13,7 +13,7 @@ def gen_motion_data():
     for dataset in datasets:
         for set in sets:
             for part in parts:
-                fn = '/gdrive/MyDrive/dgnn{}/{}_data_{}.npy'.format(dataset, set, part)
+                fn = '/gdrive/MyDrive/dgnn/{}/{}_data_{}.npy'.format(dataset, set, part)
                 if not os.path.exists(fn):
                     print('Joint/bone data does not exist for {} {} set'.format(dataset, set))
                     continue
@@ -22,7 +22,7 @@ def gen_motion_data():
                 data = np.load(fn)
                 (N, C, T, V, M) = data.shape
                 fp_sp = open_memmap(
-                    '/gdrive/MyDrive/dgnn{}/{}_data_{}_motion.npy'.format(dataset, set, part),
+                    '/gdrive/MyDrive/dgnn/{}/{}_data_{}_motion.npy'.format(dataset, set, part),
                     dtype='float32',
                     mode='w+',
                     shape=data.shape)
