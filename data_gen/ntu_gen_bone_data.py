@@ -41,7 +41,7 @@ def gen_bone_data():
                 '/content/drive/MyDrive/dgnn/{}/{}_data_bone.npy'.format(dataset, set),
                 dtype='float32',
                 mode='w+',
-                shape=(N, 2, T, V, M))
+                shape=(N, 3, T, V, M))
 
             # Copy the joints data to bone placeholder tensor
             fp_sp[:, :C, :, :, :] = data

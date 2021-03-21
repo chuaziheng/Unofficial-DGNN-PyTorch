@@ -7,7 +7,7 @@ import numpy as np
 from tqdm import tqdm
 import sys
 sys.path.extend(['../'])
-# from data_gen.preprocess import pre_normalization
+from data_gen.preprocess import pre_normalization
 
 # For Cross-Subject benchmark "xsub"
 training_subjects = [1, 2, 4, 5, 8, 9, 13, 14, 15, 16, 17, 18, 19, 25, 27, 28, 31, 34, 35, 38]
@@ -66,8 +66,8 @@ def get_nonzero_std(s):
     # Select valid frames where sum of all nodes is nonzero
     s = s[s.sum((1,2)) != 0]
     if len(s) != 0:
-        # Compute sum of standard deviation for all 2 channels as `energy`
-        s = s[..., 0].std() + s[..., 1].std()
+        # Compute sum of standard deviation for all 3 channels as `energy`
+        s = s[..., 0].std() + s[..., 1].std() + s[..., 2].std()
     else:
         s = 0
     return s
@@ -76,12 +76,12 @@ def get_nonzero_std(s):
 def read_xyz(file, max_body=4, num_joint=25):  # 取了前两个body
     seq_info = read_skeleton_filter(file)
     # Create data tensor of shape: (# persons (M), # frames (T), # nodes (V), # channels (C))
-    data = np.zeros((max_body, seq_info['numFrame'], num_joint, 2))
+    data = np.zeros((max_body, seq_info['numFrame'], num_joint, 3))
     for n, f in enumerate(seq_info['frameInfo']):
         for m, b in enumerate(f['bodyInfo']):
             for j, v in enumerate(b['jointInfo']):
                 if m < max_body and j < num_joint:
-                    data[m, n, j, :] = [v['x'], v['y']] #, v['z']
+                    data[m, n, j, :] = [v['x'], v['y'], v['z']]
 
     # select 2 max energy body
     energy = np.array([get_nonzero_std(x) for x in data])
@@ -130,14 +130,14 @@ def gendata(data_path, out_path, ignored_sample_path=None, benchmark='xview', pa
         pickle.dump((sample_name, list(sample_label)), f)
 
     # Create data tensor with shape (# examples (N), C, T, V, M)
-    fp = np.zeros((len(sample_label), 2, max_frame, num_joint, max_body_true), dtype=np.float32)
+    fp = np.zeros((len(sample_label), 3, max_frame, num_joint, max_body_true), dtype=np.float32)
 
     # Fill in the data tensor `fp` one training example a time
     for i, s in enumerate(tqdm(sample_name)):
         data = read_xyz(os.path.join(data_path, s), max_body=max_body_kinect, num_joint=num_joint)
         fp[i, :, :data.shape[1], :, :] = data
 
-    # fp = pre_normalization(fp)
+    fp = pre_normalization(fp)
     np.save('{}/{}_data_joint.npy'.format(out_path, part), fp)
 
 
