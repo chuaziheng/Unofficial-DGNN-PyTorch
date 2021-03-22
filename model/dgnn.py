@@ -65,8 +65,8 @@ class DGNBlock(nn.Module):
         self.target_M = nn.Parameter(torch.from_numpy(target_M.astype('float32')))
 
         # Updating functions
-        self.H_v = nn.Linear(2 * in_channels, out_channels)  #xx
-        self.H_e = nn.Linear(2 * in_channels, out_channels)  #xx
+        self.H_v = nn.Linear(3 * in_channels, out_channels)  #xx
+        self.H_e = nn.Linear(3 * in_channels, out_channels)  #xx
 
         self.bn_v = nn.BatchNorm2d(out_channels)
         self.bn_e = nn.BatchNorm2d(out_channels)
@@ -89,7 +89,7 @@ class DGNBlock(nn.Module):
         fe_in_agg = torch.einsum('nce,ev->ncv', fe, self.source_M.transpose(0,1))
         fe_out_agg = torch.einsum('nce,ev->ncv', fe, self.target_M.transpose(0,1))
         fvp = torch.stack((fv, fe_in_agg, fe_out_agg), dim=1)   # Out shape: (N,3,CT,V_nodes)
-        fvp = fvp.view(N, 2 * C, T, V_node).contiguous().permute(0,2,3,1)   # (N,T,V_node,3C)  #xx
+        fvp = fvp.view(N, 3 * C, T, V_node).contiguous().permute(0,2,3,1)   # (N,T,V_node,3C)  #xx
         fvp = self.H_v(fvp).permute(0,3,1,2)    # (N,C_out,T,V_node)
         fvp = self.bn_v(fvp)
         fvp = self.relu(fvp)
@@ -97,7 +97,7 @@ class DGNBlock(nn.Module):
         fv_in_agg = torch.einsum('ncv,ve->nce', fv, self.source_M)
         fv_out_agg = torch.einsum('ncv,ve->nce', fv, self.target_M)
         fep = torch.stack((fe, fv_in_agg, fv_out_agg), dim=1)   # Out shape: (N,3,CT,V_edges)
-        fep = fep.view(N, 2 * C, T, V_edge).contiguous().permute(0,2,3,1)   # (N,T,V_edge,3C)  #xx
+        fep = fep.view(N, 3 * C, T, V_edge).contiguous().permute(0,2,3,1)   # (N,T,V_edge,3C)  #xx
         fep = self.H_e(fep).permute(0,3,1,2)    # (N,C_out,T,V_edge)
         fep = self.bn_e(fep)
         fep = self.relu(fep)
