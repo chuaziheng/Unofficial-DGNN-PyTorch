@@ -5,6 +5,7 @@ from torch.autograd import Variable
 import numpy as np
 import math
 
+pref_dimensions = 3
 
 def import_class(name):
     components = name.split('.')
@@ -97,7 +98,7 @@ class DGNBlock(nn.Module):
         fv_in_agg = torch.einsum('ncv,ve->nce', fv, self.source_M)
         fv_out_agg = torch.einsum('ncv,ve->nce', fv, self.target_M)
         fep = torch.stack((fe, fv_in_agg, fv_out_agg), dim=1)   # Out shape: (N,3,CT,V_edges)
-        fep = fep.view(N, 3 * C, T, V_edge).contiguous().permute(0,2,3,1)   # (N,T,V_edge,3C)
+        fep = fep.contiguous().view(N, 3 * C, T, V_edge).permute(0,2,3,1)   # (N,T,V_edge,3C)
         fep = self.H_e(fep).permute(0,3,1,2)    # (N,C_out,T,V_edge)
         fep = self.bn_e(fep)
         fep = self.relu(fep)
@@ -128,7 +129,7 @@ class GraphTemporalConv(nn.Module):
 
 
 class Model(nn.Module):
-    def __init__(self, num_class=60, num_point=25, num_person=2, graph=None, graph_args=dict(), in_channels=2):
+    def __init__(self, num_class=60, num_point=25, num_person=2, graph=None, graph_args=dict(), in_channels= pref_dimensions ):
         super(Model, self).__init__()
 
         if graph is None:
@@ -142,7 +143,7 @@ class Model(nn.Module):
         self.data_bn_v = nn.BatchNorm1d(num_person * in_channels * num_point)
         self.data_bn_e = nn.BatchNorm1d(num_person * in_channels * num_point)
 
-        self.l1 = GraphTemporalConv(2, 64, source_M, target_M, residual=False)
+        self.l1 = GraphTemporalConv(pref_dimensions, 64, source_M, target_M, residual=False)
         self.l2 = GraphTemporalConv(64, 64, source_M, target_M)
         self.l3 = GraphTemporalConv(64, 64, source_M, target_M)
         self.l4 = GraphTemporalConv(64, 64, source_M, target_M)
@@ -174,11 +175,11 @@ class Model(nn.Module):
         # Preprocessing
         fv = fv.permute(0, 4, 3, 1, 2).contiguous().view(N, M * V_node * C, T)
         fv = self.data_bn_v(fv)
-        fv = fv.view(N, M, V_node, C, T).permute(0, 1, 3, 4, 2).contiguous().view(N * M, C, T, V_node)
+        fv = fv.contiguous().view(N, M, V_node, C, T).permute(0, 1, 3, 4, 2).contiguous().view(N * M, C, T, V_node)
 
         fe = fe.permute(0, 4, 3, 1, 2).contiguous().view(N, M * V_edge * C, T)
         fe = self.data_bn_e(fe)
-        fe = fe.view(N, M, V_edge, C, T).permute(0, 1, 3, 4, 2).contiguous().view(N * M, C, T, V_edge)
+        fe = fe.contiguous().view(N, M, V_edge, C, T).permute(0, 1, 3, 4, 2).contiguous().view(N * M, C, T, V_edge)
 
         fv, fe = self.l1(fv, fe)
         fv, fe = self.l2(fv, fe)
@@ -195,8 +196,8 @@ class Model(nn.Module):
         out_channels = fv.size(1)
 
         # Performs pooling over both nodes and frames, and over number of persons
-        fv = fv.view(N, M, out_channels, -1).mean(3).mean(1)
-        fe = fe.view(N, M, out_channels, -1).mean(3).mean(1)
+        fv = fv.contiguous().view(N, M, out_channels, -1).mean(3).mean(1)
+        fe = fe.contiguous().view(N, M, out_channels, -1).mean(3).mean(1)
 
         # Concat node and edge features
         out = torch.cat((fv, fe), dim=-1)
