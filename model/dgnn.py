@@ -5,7 +5,7 @@ from torch.autograd import Variable
 import numpy as np
 import math
 
-pref_dimensions = 3
+pref_dimensions = 2
 
 def import_class(name):
     components = name.split('.')
