@@ -6,7 +6,7 @@ feeder: feeders.feeder.Feeder
 test_feeder_args:
   joint_data_path: /gdrive/MyDrive/youtubedata/test_data_joint.npy
   bone_data_path: /gdrive/MyDrive/youtubedata/test_data_bone.npy
-  label_path: /gdrive/MyDrive/youtubedata/val_label.pkl
+  label_path: /gdrive/MyDrive/youtubedata/youtube_label.pkl
   debug: False
 
 # model
