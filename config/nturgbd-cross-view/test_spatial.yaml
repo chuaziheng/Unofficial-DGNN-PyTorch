@@ -4,9 +4,9 @@ model_saved_name: /gdrive/MyDrive/youtube/
 # feeder
 feeder: feeders.feeder.Feeder
 test_feeder_args:
-  joint_data_path: /gdrive/MyDrive/youtube/test_data_joint.npy
-  bone_data_path: /gdrive/MyDrive/youtube/test_data_bone.npy
-  label_path: /gdrive/MyDrive/youtube/val_label.pkl
+  joint_data_path: /gdrive/MyDrive/youtubedata/test_data_joint.npy
+  bone_data_path: /gdrive/MyDrive/youtubedata/test_data_bone.npy
+  label_path: /gdrive/MyDrive/youtubedata/val_label.pkl
   debug: False
 
 # model
