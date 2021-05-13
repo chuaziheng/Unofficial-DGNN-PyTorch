@@ -88,9 +88,10 @@ class BaseDataset(Dataset):
         return data_numpy, label, index
 
     def top_k(self, score, top_k):
-        rank = score.argsort()
-        hit_top_k = [l in rank[i, -top_k:] for i, l in enumerate(self.label)]
-        return sum(hit_top_k) * 1.0 / len(hit_top_k)
+        rank = score.argsort()  #sort from lowest confidence to highest
+        print(f'rank: {rank}')
+        hit_top_k = [l in rank[i, -top_k:] for i, l in enumerate(self.label)]  # boolean
+        return sum(hit_top_k) * 1.0 / len(hit_top_k)  # accuracy percentage
 
 
 class Feeder(Dataset):

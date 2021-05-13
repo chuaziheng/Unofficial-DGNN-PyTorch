@@ -1,7 +1,7 @@
 import os
 import numpy as np
 from numpy.lib.format import open_memmap
-
+import argparse
 from tqdm import tqdm
 
 paris = {
@@ -28,16 +28,25 @@ paris = {
 }
 
 
-def gen_bone_data():
+def gen_bone_data(arg):
     """Generate bone data from joint data for NTU skeleton dataset"""
-
-    data = np.load('C:/Users/chuaz/Documents/NTU/Y2S2/URECA/youtube/test_data_joint.npy')
+    if arg.data_path:
+        data = np.load(arg.data_path)
+    else:
+        data = np.load('C:/Users/chuaz/Documents/NTU/Y2S2/URECA/youtube/test_data_joint.npy')
     N, C, T, V, M = data.shape
-    fp_sp = open_memmap(
-        'C:/Users/chuaz/Documents/NTU/Y2S2/URECA/youtube/test_data_bone.npy',
-        dtype='float32',
-        mode='w+',
-        shape=(N, 2, T, V, M))
+    if arg.data_path:
+        fp_sp = open_memmap(
+            arg.data_path,
+            dtype='float32',
+            mode='w+',
+            shape=(N, 2, T, V, M))
+    else:
+        fp_sp = open_memmap(
+            'C:/Users/chuaz/Documents/NTU/Y2S2/URECA/youtube/test_data_bone.npy',
+            dtype='float32',
+            mode='w+',
+            shape=(N, 2, T, V, M))
 
     # Copy the joints data to bone placeholder tensor
     fp_sp[:, :C, :, :, :] = data
@@ -51,4 +60,8 @@ def gen_bone_data():
 
 
 if __name__ == '__main__':
-    gen_bone_data()
+    parser = argparse.ArgumentParser(description='Generate bone data from joint data for youtube datasets.')
+    parser.add_argument('--data_path')
+    arg = parser.parse_args()
+    gen_bone_data(arg)
+
