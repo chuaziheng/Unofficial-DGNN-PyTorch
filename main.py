@@ -512,6 +512,7 @@ class Processor():
 
             # Concatenate along the batch dimension, and 1st dim ~= `len(dataset)`
             score = np.concatenate(score_batches)
+            print(f"score: {score}")
             loss = np.mean(loss_values)
             accuracy = self.data_loader[ln].dataset.top_k(score, 1)
             if accuracy > self.best_acc:
