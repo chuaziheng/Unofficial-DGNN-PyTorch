@@ -1,15 +1,12 @@
-work_dir: ./work_dir/ntu/xview/dgnn_test_spatial
-model_saved_name: /gdrive/MyDrive/youtube/
+work_dir: ./workspace/
+model_saved_name: ./model_save
 
 # feeder
 feeder: feeders.feeder.Feeder
 test_feeder_args:
-  joint_data_path: /gdrive/MyDrive/youtubedata/test_data_joint.npy
-  bone_data_path: /gdrive/MyDrive/youtubedata/test_data_bone.npy
-  label_path: /gdrive/MyDrive/youtubedata/youtube_label.pkl
-  # joint_data_path: /gdrive/MyDrive/youtubedata/test_data_joint_2.npy
-  # bone_data_path: /gdrive/MyDrive/youtubedata/test_data_joint_2bone.npy
-  # label_path: /gdrive/MyDrive/youtubedata/youtube_label_2.pkl
+  joint_data_path: ./data/test_data_joint.npy
+  bone_data_path: ./data/test_data_bone.npy
+  label_path: ./data/test_label.pkl
   debug: False
 
 # model
@@ -26,5 +23,5 @@ device: [0]
 test_batch_size: 32
 # NOTE: default tests the newest weight
 # Change filename if using different batch sizes
-weights: /gdrive/MyDrive/youtube/-1-446.pt      #./runs/ntu_cs_dgnn_spatial-49-62600.pt
+weights: ./weights/-9-5880.pt      #./runs/ntu_cs_dgnn_spatial-49-62600.pt
 save_score: True  # True for performing 2-stream fusion

@@ -33,7 +33,7 @@ def gen_bone_data(arg):
     if arg.data_path:
         data = np.load(arg.data_path)
     else:
-        data = np.load('C:/Users/chuaz/Documents/NTU/Y2S2/URECA/youtube/test_data_joint.npy')
+        data = np.load(r'C:\Users\chuaz\Unofficial-DGNN-PyTorch\data\test_data_joint.npy')
     N, C, T, V, M = data.shape
     if arg.data_path:
         fp_sp = open_memmap(
@@ -43,7 +43,7 @@ def gen_bone_data(arg):
             shape=(N, 2, T, V, M))
     else:
         fp_sp = open_memmap(
-            'C:/Users/chuaz/Documents/NTU/Y2S2/URECA/youtube/test_data_bone.npy',
+            r'C:\Users\chuaz\Unofficial-DGNN-PyTorch\data\test_data_bone.npy',
             dtype='float32',
             mode='w+',
             shape=(N, 2, T, V, M))
