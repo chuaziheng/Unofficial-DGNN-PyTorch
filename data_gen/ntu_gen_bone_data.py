@@ -28,17 +28,17 @@ paris = {
 }
 
 sets = {'train', 'val'}
-datasets = {'xview', 'xsub'}
+datasets = {'xview'}
 
 def gen_bone_data():
     """Generate bone data from joint data for NTU skeleton dataset"""
     for dataset in datasets:
         for set in sets:
             print(dataset, set)
-            data = np.load('C:/Users/chuaz/Documents/NTU/Y2S2/URECA/out/{}/{}_data_joint.npy'.format(dataset, set))
+            data = np.load(rf"D:\skel_colour\{dataset}\{set}_data_joint.npy")
             N, C, T, V, M = data.shape
             fp_sp = open_memmap(
-                'C:/Users/chuaz/Documents/NTU/Y2S2/URECA/out/{}/{}_data_bone.npy'.format(dataset, set),
+                rf"D:\skel_colour\{dataset}\{set}_data_bone.npy",
                 dtype='float32',
                 mode='w+',
                 shape=(N, 3, T, V, M))

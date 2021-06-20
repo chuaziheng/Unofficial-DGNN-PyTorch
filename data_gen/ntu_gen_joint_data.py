@@ -81,7 +81,8 @@ def read_xyz(file, max_body=4, num_joint=25):  # 取了前两个body
         for m, b in enumerate(f['bodyInfo']):
             for j, v in enumerate(b['jointInfo']):
                 if m < max_body and j < num_joint:
-                    data[m, n, j, :] = [v['x'], v['y'], v['z']]
+                    # data[m, n, j, :] = [v['x'], v['y'], v['z']]  # use x, y ,z    NOT colorX colorY
+                    data[m, n, j, :] = [v['colorX'], v['colorY'], 0]  # use colorX and colorY instead
 
     # select 2 max energy body
     energy = np.array([get_nonzero_std(x) for x in data])
@@ -137,7 +138,7 @@ def gendata(data_path, out_path, ignored_sample_path=None, benchmark='xview', pa
         data = read_xyz(os.path.join(data_path, s), max_body=max_body_kinect, num_joint=num_joint)
         fp[i, :, :data.shape[1], :, :] = data
 
-    fp = pre_normalization(fp)
+    fp = pre_normalization(fp)  # replace 3rd dimension with zeros
     np.save('{}/{}_data_joint.npy'.format(out_path, part), fp)
 
 
@@ -148,7 +149,8 @@ if __name__ == '__main__':
                         default='../data/nturgbd_raw/samples_with_missing_skeletons.txt')
     parser.add_argument('--out_folder', default='../data/ntu/')
 
-    benchmarks = ['xsub', 'xview']
+    # benchmarks = ['xsub', 'xview']
+    benchmarks = ['xview']
     parts = ['train', 'val']
     arg = parser.parse_args()
 
