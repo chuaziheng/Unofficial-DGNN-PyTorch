@@ -87,7 +87,7 @@ def read_xyz(file, max_body=4, num_joint=25):  # 取了前两个body
     # select 2 max energy body
     energy = np.array([get_nonzero_std(x) for x in data])
     index = energy.argsort()[::-1][0:max_body_true]
-    data = data[index]
+    data = data[index]  # (2,frames, joints, channels)
     # Data new shape: (C, T, V, M)
     data = data.transpose(3, 1, 2, 0)
     return data
